@@ -1,4 +1,4 @@
-module github.com/shoebilyas123/shit
+module github.com/shoebilyas123/hash
 
 go 1.22.3
 

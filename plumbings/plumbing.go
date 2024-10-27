@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/shoebilyas123/shit/common"
+	"github.com/shoebilyas123/hash/common"
 )
 
 const (
@@ -43,8 +43,8 @@ func getObjectType(mode int64) string {
 
 // git hash-object filepath.txt
 func HashObject(argvs []string, obj_type, _cont string) string {
-	if !common.CheckShitInit() {
-		fmt.Println("fatal: not a shit repository (or any of the parent directories): .shit")
+	if !common.CheckHashInit() {
+		fmt.Println("fatal: not a hash repository (or any of the parent directories): .hash")
 		return ""
 	}
 
@@ -76,7 +76,7 @@ func HashObject(argvs []string, obj_type, _cont string) string {
 
 	sha1 := fmt.Sprintf("%x", h.Sum(nil))
 
-	dir_p := pwd + "/.shit/objects/" + sha1[0:2]
+	dir_p := pwd + "/.hash/objects/" + sha1[0:2]
 	f_path := sha1[2:]
 
 	var comp_content bytes.Buffer
@@ -104,14 +104,14 @@ func HashObject(argvs []string, obj_type, _cont string) string {
 }
 
 func WriteTree() string {
-	sha_1 := HashObject([]string{"/.shit/index"}, "tree", "")
+	sha_1 := HashObject([]string{"/.hash/index"}, "tree", "")
 	fmt.Println(sha_1)
 
 	return sha_1
 }
 
 func CatFile(argvs []string) (string, error) {
-	filepath := fmt.Sprintf("./.shit/objects/%s/%s", argvs[1][0:2], argvs[1][2:])
+	filepath := fmt.Sprintf("./.hash/objects/%s/%s", argvs[1][0:2], argvs[1][2:])
 
 	fbytes, _ := os.ReadFile(filepath)
 	buff := bytes.NewBuffer(fbytes)
@@ -158,15 +158,15 @@ func UpdateIndexAdd(argvs []string) {
 		mode = 100644
 	}
 
-	if !common.CheckDirExistence("./.shit/index") {
-		common.HandleCreateFile("./.shit", "index")
+	if !common.CheckDirExistence("./.hash/index") {
+		common.HandleCreateFile("./.hash", "index")
 	}
 
 	// Get the index file contents
 	// Parse them into an array of []IndexEntry
 	// Search for a file with the same file name and update the entire entry
 	// Format the new array into a string and read it into the file again
-	index_contents, err := os.ReadFile("./.shit/index")
+	index_contents, err := os.ReadFile("./.hash/index")
 
 	if err != nil {
 		fmt.Printf("fatal: cannot read the index file\n")
@@ -196,11 +196,11 @@ func UpdateIndexAdd(argvs []string) {
 	fmt.Println(strings.Join(update_content, "\n"))
 	// fmt.Println(current_entry)s
 
-	if !common.CheckDirExistence("./.shit/index") {
-		common.HandleCreateFile("./.shit", "index")
+	if !common.CheckDirExistence("./.hash/index") {
+		common.HandleCreateFile("./.hash", "index")
 	}
 
-	os.WriteFile("./.shit/index", []byte(strings.Join(update_content, "\n")), 0644)
+	os.WriteFile("./.hash/index", []byte(strings.Join(update_content, "\n")), 0644)
 }
 
 func UpdateIndex(argvs []string) {
@@ -231,7 +231,7 @@ func CommitTree(treesha_1, parentsha_1, commit_msg string) string {
 
 func UpdateRef(path string, commit_sha string) bool {
 	path_arr := strings.Split(path, "/")
-	dir_path := "./.shit/" + strings.Join(path_arr[0:len(path_arr)-1], "/")
+	dir_path := "./.hash/" + strings.Join(path_arr[0:len(path_arr)-1], "/")
 	filename := path_arr[len(path_arr)-1]
 
 	fmt.Printf("%s::%s\n", dir_path, filename)
@@ -240,21 +240,21 @@ func UpdateRef(path string, commit_sha string) bool {
 		common.HandleCreateFile(dir_path, filename)
 	}
 
-	os.WriteFile("./.shit/"+path, []byte(commit_sha), 0644)
+	os.WriteFile("./.hash/"+path, []byte(commit_sha), 0644)
 
 	return true
 
 }
 
-// shit log <ref_name>
+// hash log <ref_name>
 func Log(ref, commit_sha string) {
 	if len(ref) > 0 {
-		if !common.CheckDirExistence("./.shit/" + ref) {
+		if !common.CheckDirExistence("./.hash/" + ref) {
 			fmt.Println("Fatal: ref does not exist")
 			return
 		}
 
-		commit_id, _ := os.ReadFile("./.shit/" + ref)
+		commit_id, _ := os.ReadFile("./.hash/" + ref)
 		Log("", string(commit_id))
 	} else if len(commit_sha) > 0 {
 		store, _ := CatFile([]string{"", commit_sha})

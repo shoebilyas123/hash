@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/shoebilyas123/shit/common"
+	"github.com/shoebilyas123/hash/common"
 )
 
 func Init(argvs []string) {
@@ -28,17 +28,17 @@ func Init(argvs []string) {
 		} else {
 			// TODO: Will ask if you want to init that directory?
 			// Check for directory name clashes
-			fmt.Printf("Navigate into the directory and shit init your project")
+			fmt.Printf("Navigate into the directory and hash init your project")
 		}
 	}
 
-	// If the target_dir already has a .shit folder throw appropriate error
-	if common.CheckDirExistence(target_dir + "/.shit") {
+	// If the target_dir already has a .hash folder throw appropriate error
+	if common.CheckDirExistence(target_dir + "/.hash") {
 		panic("Error: Cannot overwrite an already initialized <Repository>")
 	}
 
-	// Create a .shit directory followed by a child objects folder
-	target_dir += "/.shit"
+	// Create a .hash directory followed by a child objects folder
+	target_dir += "/.hash"
 	common.HandleCreateDir(target_dir, 0755)
 
 	common.HandleCreateDir(target_dir+"/objects", 0755)

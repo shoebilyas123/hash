@@ -4,17 +4,17 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/shoebilyas123/shit/commands"
-	"github.com/shoebilyas123/shit/initialize"
-	"github.com/shoebilyas123/shit/plumbings"
+	"github.com/shoebilyas123/hash/commands"
+	"github.com/shoebilyas123/hash/initialize"
+	"github.com/shoebilyas123/hash/plumbings"
 )
 
-// The init pattern that we are looking for: shit (init)(argvs[1])
+// The init pattern that we are looking for: hash (init)(argvs[1])
 func main() {
 	argvs := os.Args
 
 	if len(argvs) < 2 {
-		fmt.Println("Shit is a content-addressable file system inspired by git")
+		fmt.Println("Hash is a content-addressable file system inspired by git")
 		os.Exit(0)
 	}
 

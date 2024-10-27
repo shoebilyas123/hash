@@ -42,6 +42,6 @@ func ReadFileContents(path string) string {
 	return string(contents)
 }
 
-func CheckShitInit() bool {
-	return CheckDirExistence("./.shit")
+func CheckHashInit() bool {
+	return CheckDirExistence("./.hash")
 }
